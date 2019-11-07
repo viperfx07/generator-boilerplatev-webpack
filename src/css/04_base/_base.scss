@@ -1,0 +1,143 @@
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+	background: #b3d4fc;
+	text-shadow: none;
+}
+
+::selection {
+	background: #b3d4fc;
+	text-shadow: none;
+}
+
+/* crit:start */
+
+*,
+*:before,
+*:after {
+	flex: 0 1 auto;
+}
+
+html {
+	font-size: 100%;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-ms-overflow-style: scrollbar;
+}
+
+body {
+	min-height: 100vh;
+}
+
+fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+input {
+	@include fzlh(15px, 24px);
+	border-radius: 0;
+	/* crit */
+	&[type="search"],
+	&[type="text"],
+	&[type="password"],
+	&[type="tel"],
+	&[type="number"],
+	&[type="email"] {
+		box-sizing: border-box;
+		width: 100%;
+		padding: 12px 17px;
+		border: 1px solid $border;
+		min-height: 48px;
+	}
+
+	&:invalid {
+		// remove red border on invalid input on mozilla
+		box-shadow: none;
+		/* crit */
+	}
+
+	&::placeholder {
+		color: rgba($text, .8);
+		/* crit */
+	}
+
+	&.error {
+		border-color: red;
+	}
+
+	&::-ms-clear {
+		display: none;
+	}
+}
+
+table:not(.u-table-unstyled) {
+	width: 100%;
+	td,
+	th {
+		padding: 15px;
+		&:first-child {
+			padding-left: 0;
+		}
+	}
+	th {
+		color: $text;
+		text-align: left;
+	}
+	tr {
+		border-bottom: 1px solid $border;
+	}
+	thead {
+		tr {
+			border-bottom: 3px solid $border;
+		}
+	}
+}
+
+select, textarea{
+	// Prevent ios default box shadow and radius
+	appearance: none;
+	border-radius: 0;
+	display: block;
+	padding: 11px 18px;
+	width: 100%;
+	background-color: #fff;
+	border: 1px solid $border;
+
+	&:disabled{
+		opacity: .5;
+	}
+
+	&:focus{
+		box-shadow: 0 0 10px 0 rgba(204, 218, 225, 0.7);
+		background-color: #fff;
+	}
+}
+
+select{
+	border-radius: 0;
+	background: #fff url('<%= assetsDir %>/img/chevron-down.svg') calc(100% - 16px) 50% no-repeat;
+	background-size: 12px auto;
+	&::-ms-expand {
+		display: none;
+	}
+}
+
+textarea{
+	overflow: auto;
+	resize: none;
+	resize: vertical;
+}
+
+img{
+	max-width: 100%;
+	height: auto;
+}
+/* crit:end */

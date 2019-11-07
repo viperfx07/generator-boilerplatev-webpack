@@ -1,0 +1,60 @@
+// generate font-size and line-height based on line-height in pixel
+@mixin fzlh($fz, $lh){
+	font-size: $fz;
+	line-height: ($lh / $fz);
+}
+
+@mixin h1{
+	@include fzlh(48px, 64px);
+	font-weight: 400;
+}
+@mixin h2 {
+	@include fzlh(38px, 48px);
+	font-weight: 400;
+
+}
+@mixin h3 {
+	@include fzlh(26px, 40px);
+	font-weight: 300;
+}
+@mixin h4 {
+	@include fzlh(22px, 32px);
+	font-weight: 400;
+
+}
+@mixin h5 {
+	@include fzlh(18px, 24px);
+	font-weight: 700;
+}
+@mixin h6 {
+	@include fzlh(16px, 24px);
+	font-weight: 500;
+}
+
+
+@mixin fsblockquote{
+	$font-size: 23px;
+	font-style: italic;
+	@include fzlh($font-size, 36px);
+}
+
+@mixin fslead{
+	$font-size: 21px;
+	font-weight: 300;
+	@include fzlh($font-size, 30px);
+}
+
+@mixin fsbodylarge{
+	$font-size: 17px;
+	@include fzlh($font-size, 30px);
+}
+
+@mixin fssmall{
+	$font-size: 12px;
+	@include fzlh($font-size, 18px);
+}
+
+@mixin fsbtn{
+	@include fzlh(13px, 24px);
+	font-weight: 500;
+}
