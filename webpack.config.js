@@ -1,8 +1,13 @@
 const path = require("path");
 const glob = require("glob");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const pugIncludeGlob = require("pug-include-glob");
 const magicImporter = require("node-sass-magic-importer");
+
+// webpack plugins
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin')
 
 const pugHtmls = glob.sync("./src/*.pug").map(template => {
   const templateSplit = template.split("/");
@@ -41,17 +46,12 @@ const getPostCssPlugins = () =>
   ].filter(item => !!item);
 
 module.exports = {
-	entry: () => {
-		const entryArray = [
-			...glob.sync('./src/js/*.js'),
-			...glob.sync('./src/css/*.scss')
-		]
-		const entryObject = entryArray.reduce((acc, item) => {
-			const name = path.basename(item).replace(/\.js$/gi, '')
-			acc[name] = item
-			return acc
-		}, {})
-		return entryObject
+	entry: {
+		main: ['./src/js/main.js', './src/css/main.scss']
+	},
+	output: {
+		filename: '[name].[hash].js',
+		chunkFilename: '[name].[chunkhash].js'
 	},
 	resolve: {
 		alias: {
@@ -119,7 +119,10 @@ module.exports = {
 					// this matches plain `<style>` or `<style scoped>`
 					{
 						use: [
-							'vue-style-loader',
+							{
+								loader: MiniCssExtractPlugin.loader,
+								options: {}
+							},
 							'css-loader',
 							{
 								loader: 'postcss-loader',
@@ -139,10 +142,60 @@ module.exports = {
 						]
 					}
 				]
+			},
+			{
+				test: /\.js$/,
+				loader: 'babel-loader',
+				exclude: /node_modules(\/|\\)(?!(conditioner-core|bootstrap|vue2-smooth-scroll|simplestatemanager|lru-cache)(\/|\\)).*/,
+				options: {
+					// note: if some modules don't work on IE10/IE11, try loose mode on preset-env
+					// example below:
+					// presets: [['@babel/preset-env', { loose: true }], '@babel/preset-react'],
+					presets: ['@babel/preset-env'],
+					plugins: [
+						'@babel/plugin-transform-runtime',
+						// // Stage 2
+						// [
+						// 	'@babel/plugin-proposal-decorators',
+						// 	{ legacy: true }
+						// ],
+						// // Stage 3
+						'@babel/plugin-syntax-dynamic-import',
+						[
+							'@babel/plugin-proposal-class-properties',
+							{ loose: true }
+						]
+					]
+				}
+				// include: __dirname,
+			},
+			{
+				test: /\.(jpe?g|gif|png|svg|woff|ttf|eot|wav|mp3)$/,
+				loader: 'file-loader'
 			}
 		]
 	},
-	plugins: [...pugHtmls],
+	optimization: {
+		minimizer: [
+			new UglifyJsPlugin({
+				parallel: true
+			})
+		],
+		runtimeChunk: {
+			name: 'manifest'
+		},
+		splitChunks: {
+			// include all types of chunks
+			chunks: 'all'
+		}
+	},
+	plugins: [
+		...pugHtmls,
+		new MiniCssExtractPlugin({
+			filename: 'main.[chunkhash].css'
+		}),
+		new ManifestPlugin()
+	],
 	devServer: {
 		contentBase: path.join(__dirname, 'dist'),
 		compress: true,
