@@ -50,8 +50,8 @@ module.exports = {
 		main: ['./src/js/main.js', './src/css/main.scss']
 	},
 	output: {
-		filename: '[name].[hash].js',
-		chunkFilename: '[name].[chunkhash].js'
+		filename: '[name].js?v=[hash]',
+		chunkFilename: '[name].js?v=[chunkhash]'
 	},
 	resolve: {
 		alias: {
@@ -191,6 +191,11 @@ module.exports = {
 	},
 	plugins: [
 		...pugHtmls,
+		new HtmlWebpackPlugin({
+			template: './cshtml/_Layout.cshtml',
+			filename: './cshtml/Layout.cshtml',
+			inject: false
+		}),
 		new MiniCssExtractPlugin({
 			filename: 'main.[chunkhash].css'
 		}),

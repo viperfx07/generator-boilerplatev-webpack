@@ -1,0 +1,12 @@
+<html>
+	<head>
+		<title>Test</title>
+	</head>
+	<body>
+		<script src="before.js"></script>
+		<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+		<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+		<% } %>
+		<script src="after.js"></script>
+	</body>
+</html>
