@@ -1,22 +1,23 @@
-const path = require("path");
-const glob = require("glob");
-const pugIncludeGlob = require("pug-include-glob");
-const magicImporter = require("node-sass-magic-importer");
+const path = require('path')
+const glob = require('glob')
+const pugIncludeGlob = require('pug-include-glob')
+const magicImporter = require('node-sass-magic-importer')
 
 // webpack plugins
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
-const pugHtmls = glob.sync("./src/*.pug").map(template => {
-  const templateSplit = template.split("/");
+const pugHtmls = glob.sync('./src/*.pug').map(template => {
+	const templateSplit = template.split('/')
 
-  return new HtmlWebpackPlugin({
-    template,
-    filename: templateSplit[templateSplit.length - 1].replace(".pug", ".html")
-  });
-});
+	return new HtmlWebpackPlugin({
+		template,
+		filename: templateSplit[templateSplit.length - 1].replace('.pug', '.html'),
+	})
+})
 
 const getPostCssPlugins = () =>
 	[
@@ -24,12 +25,12 @@ const getPostCssPlugins = () =>
 		require('rucksack-css')({ reporter: true }),
 		require('postcss-pxtorem')({ replace: false }),
 		require('@fullhuman/postcss-purgecss')({
-			content: ['./src/*.pug']
+			content: ['./src/*.pug', './src/pug/**/*.pug', './src/js/*/**.vue'],
 		}),
 		require('cssnano')({
 			rebase: false,
 			discardComments: {
-				removeAll: true
+				removeAll: true,
 			},
 			discardUnused: false,
 			minifyFontValues: true,
@@ -44,19 +45,21 @@ const getPostCssPlugins = () =>
 			reduceInitial: true,
 			reduceIdents: false,
 			mergeRules: false,
-			zindex: false
-		})
-	].filter((item) => !!item)
+			zindex: false,
+		}),
+	].filter(item => !!item)
 
 module.exports = {
 	entry: {
-		main: ['./src/js/main.js', './src/css/main.scss']
+		main: ['./src/js/main.js', './src/css/main.scss'],
 	},
 	output: {
 		filename: '[name].js?v=[hash]',
-		chunkFilename: '[name].js?v=[chunkhash]'
+		chunkFilename: '[name].js?v=[chunkhash]',
+		publicPath: '/',
 	},
 	resolve: {
+		extensions: ['.js', '.vue'],
 		alias: {
 			'@': path.resolve('src/js'),
 			'@@': path.resolve('src'),
@@ -64,26 +67,40 @@ module.exports = {
 			ScrollMagic: 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js',
 			TweenMax: 'gsap/umd/TweenMax.js',
 			TweenLite: 'gsap/umd/TweenLite.js',
-			TimelineMax: 'gsap/umd/TimelineMax.js'
-		}
+			TimelineMax: 'gsap/umd/TimelineMax.js',
+		},
 	},
 	externals: {
 		jquery: 'jQuery',
-		vue: 'Vue'
+		vue: 'Vue',
 	},
 	module: {
 		rules: [
 			{
 				test: /\.pug$/,
-				use: [
+				oneOf: [
 					{
-						loader: 'pug-loader',
-						query: {
-							pretty: true,
-							plugins: [pugIncludeGlob({})]
-						}
-					}
-				]
+						resourceQuery: /^\?vue/,
+						use: ['pug-plain-loader'],
+					},
+					// this applies to pug imports inside JavaScript
+					{
+						use: [
+							'raw-loader',
+							{
+								loader: 'pug-plain-loader',
+								options: {
+									pretty: true,
+									plugins: [pugIncludeGlob({})],
+								},
+							},
+						],
+					},
+				],
+			},
+			{
+				test: /\.vue$/,
+				loader: 'vue-loader',
 			},
 			{
 				test: /\.scss$/,
@@ -97,54 +114,53 @@ module.exports = {
 								loader: 'css-loader',
 								options: {
 									modules: true,
-									localIdentName:
-										'[path][name]---[local]---[hash:base64:5]',
-									camelCase: true
-								}
+									localIdentName: '[path][name]---[local]---[hash:base64:5]',
+									camelCase: true,
+								},
 							},
 							{
 								loader: 'postcss-loader',
 								options: {
 									ident: 'postcss-scss-module',
-									plugins: () => getPostCssPlugins()
-								}
+									plugins: () => getPostCssPlugins(),
+								},
 							},
 							{
 								loader: 'sass-loader',
 								options: {
 									sassOptions: {
-										importer: magicImporter()
-									}
-								}
-							}
-						]
+										importer: magicImporter(),
+									},
+								},
+							},
+						],
 					},
 					// this matches plain `<style>` or `<style scoped>`
 					{
 						use: [
 							{
 								loader: MiniCssExtractPlugin.loader,
-								options: {}
+								options: {},
 							},
 							'css-loader',
 							{
 								loader: 'postcss-loader',
 								options: {
 									ident: 'postcss-scss',
-									plugins: () => getPostCssPlugins()
-								}
+									plugins: () => getPostCssPlugins(),
+								},
 							},
 							{
 								loader: 'sass-loader',
 								options: {
 									sassOptions: {
-										importer: magicImporter()
-									}
-								}
-							}
-						]
-					}
-				]
+										importer: magicImporter(),
+									},
+								},
+							},
+						],
+					},
+				],
 			},
 			{
 				test: /\.js$/,
@@ -164,49 +180,47 @@ module.exports = {
 						// ],
 						// // Stage 3
 						'@babel/plugin-syntax-dynamic-import',
-						[
-							'@babel/plugin-proposal-class-properties',
-							{ loose: true }
-						]
-					]
-				}
+						['@babel/plugin-proposal-class-properties', { loose: true }],
+					],
+				},
 				// include: __dirname,
 			},
 			{
 				test: /\.(jpe?g|gif|png|svg|woff|ttf|eot|wav|mp3)$/,
-				loader: 'file-loader'
-			}
-		]
+				loader: 'file-loader',
+			},
+		],
 	},
 	optimization: {
 		minimizer: [
 			new UglifyJsPlugin({
-				parallel: true
-			})
+				parallel: true,
+			}),
 		],
 		runtimeChunk: {
-			name: 'manifest'
+			name: 'manifest',
 		},
 		splitChunks: {
 			// include all types of chunks
-			chunks: 'all'
-		}
+			chunks: 'all',
+		},
 	},
 	plugins: [
 		...pugHtmls,
 		new HtmlWebpackPlugin({
 			template: './cshtml/_Layout.cshtml',
 			filename: './cshtml/Layout.cshtml',
-			inject: false
+			inject: false,
 		}),
+		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
-			filename: 'main.[chunkhash].css'
+			filename: 'main.[chunkhash].css',
 		}),
-		new ManifestPlugin()
+		new ManifestPlugin(),
 	],
 	devServer: {
 		contentBase: path.join(__dirname, 'dist'),
 		compress: true,
-		port: 9000
-	}
+		port: 9000,
+	},
 }

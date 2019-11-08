@@ -1,12 +1,12 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"],
-      "@/*": ["./*"],
-      "~~/*": ["./*"],
-      "@@/*": ["./*"]
-    }
-  },
-  "exclude": ["node_modules", "dist"]
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["./src/js/*"],
+			"@/*": ["./src/js/*"],
+			"~~/*": ["./src/*"],
+			"@@/*": ["./src/*"]
+		}
+	},
+	"exclude": ["node_modules", "dist"]
 }

@@ -37,14 +37,11 @@ export default (el, $el, opts) => {
 			onTopLiOpened() {
 				const $opened = $('.c-nav-main').find('.is-open')
 				if ($opened.length) {
-					if (
-						$opened.closest('.has-sub').length ||
-						$opened.hasClass('has-sub')
-					) {
+					if ($opened.closest('.has-sub').length || $opened.hasClass('has-sub')) {
 						$('html').addClass('is-navmain-active')
 					}
 				}
-			}
+			},
 		},
 		navsub: {
 			/* prefix for generated unique id attributes, which are required
@@ -73,7 +70,7 @@ export default (el, $el, opts) => {
 			openClass: 'is-open',
 
 			// hover intent
-			openDelay: 50
+			openDelay: 50,
 
 			// onTopLiClosed() {
 			// 	$('html').removeClass('is-navmain-active')
@@ -89,7 +86,7 @@ export default (el, $el, opts) => {
 			// 		}
 			// 	}
 			// }
-		}
+		},
 	}
 
 	const opt = opts.key ? _opts[opts.key] : {}

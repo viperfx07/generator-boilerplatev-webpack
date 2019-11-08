@@ -2,21 +2,18 @@ module.exports = {
 	root: true,
 	env: {
 		browser: true,
-		node: true
+		node: true,
 	},
 	parserOptions: {
-		parser: 'babel-eslint'
+		parser: 'babel-eslint',
 	},
-	extends: [
-		'prettier',
-		'prettier/vue',
-		'plugin:prettier/recommended',
-	],
+	extends: ['plugin:vue/recommended', 'prettier', 'prettier/vue', 'plugin:prettier/recommended'],
 	plugins: ['prettier'],
 	// add your custom rules here
 	rules: {
 		'no-console': 'off',
 		camelcase: 'off',
-		'comma-dangle': ['off', 'always']
-	}
+		indent: ['error', 'tab'],
+		'comma-dangle': ['off', 'always'],
+	},
 }
