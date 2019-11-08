@@ -19,31 +19,34 @@ const pugHtmls = glob.sync("./src/*.pug").map(template => {
 });
 
 const getPostCssPlugins = () =>
-  [
-    require("autoprefixer")(),
-    require("rucksack-css")({ reporter: true }),
-    require("postcss-pxtorem")({ replace: false }),
-    require("cssnano")({
-      rebase: false,
-      discardComments: {
-        removeAll: true
-      },
-      discardUnused: false,
-      minifyFontValues: true,
-      filterOptimiser: true,
-      functionOptimiser: true,
-      minifyParams: true,
-      normalizeUrl: true,
-      reduceBackgroundRepeat: true,
-      convertValues: true,
-      discardEmpty: true,
-      minifySelectors: true,
-      reduceInitial: true,
-      reduceIdents: false,
-      mergeRules: false,
-      zindex: false
-    })
-  ].filter(item => !!item);
+	[
+		require('autoprefixer')(),
+		require('rucksack-css')({ reporter: true }),
+		require('postcss-pxtorem')({ replace: false }),
+		require('@fullhuman/postcss-purgecss')({
+			content: ['./src/*.pug']
+		}),
+		require('cssnano')({
+			rebase: false,
+			discardComments: {
+				removeAll: true
+			},
+			discardUnused: false,
+			minifyFontValues: true,
+			filterOptimiser: true,
+			functionOptimiser: true,
+			minifyParams: true,
+			normalizeUrl: true,
+			reduceBackgroundRepeat: true,
+			convertValues: true,
+			discardEmpty: true,
+			minifySelectors: true,
+			reduceInitial: true,
+			reduceIdents: false,
+			mergeRules: false,
+			zindex: false
+		})
+	].filter((item) => !!item)
 
 module.exports = {
 	entry: {
