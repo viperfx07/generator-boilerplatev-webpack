@@ -2,9 +2,11 @@ extends pug/layouts/global.pug
 
 block content
 	.container
-		h1 Content
+		h2 Content
+		svg
+			use(xlink:href="#facebook")
 		div(data-module="loadcontainer" data-module-options="{ name: 'ContainerTest' }")
-		div(data-module="slickjs" data-module-options="{ rows: 0 }")
+		div(data-module="slickjs" data-module-options="{ rows: 0, slidesToShow: 3, slidesToScroll: 3 }")
 			img.slick-slide(src="https://unsplash.it/400/400")
 			img.slick-slide(src="https://unsplash.it/400/400")
 			img.slick-slide(src="https://unsplash.it/400/400")

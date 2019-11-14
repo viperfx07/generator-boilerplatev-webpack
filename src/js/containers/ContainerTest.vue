@@ -1,14 +1,33 @@
 <template lang="pug">
-BaseButton(
-	name="test"
-)
+	.u-posr
+		BaseImg(
+			:sources="sources"
+		)
 </template>
 
 <script>
-import BaseButton from '@/components/BaseButton'
+import BaseImg from '@/components/BaseImg'
 export default {
 	components: {
-		BaseButton,
+		BaseImg,
+	},
+	data() {
+		return {
+			sources: [
+				{
+					srcset: [
+						{
+							src: 'https://unsplash.it/500/100',
+							descriptor: '500w',
+						},
+						{
+							src: 'https://unsplash.it/1200/200',
+							descriptor: '1200w',
+						},
+					],
+				},
+			],
+		}
 	},
 }
 </script>

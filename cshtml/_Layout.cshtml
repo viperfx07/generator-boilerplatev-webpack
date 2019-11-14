@@ -3,6 +3,8 @@
 		<title>Test</title>
 	</head>
 	<body>
+		<%= compilation.assets['spritemap.svg'].source() %>
+
 		<script src="before.js"></script>
 		<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
 		<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>

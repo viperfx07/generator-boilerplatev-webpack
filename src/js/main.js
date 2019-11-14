@@ -50,15 +50,15 @@ import 'bootstrap/js/src/tab'
 
 // To define with media query, do the ones that have mediaquery first, then the ones without
 // If you define with media query, it will load based on the set media query
-window.lazySizesConfig = window.lazySizesConfig || {}
-window.lazySizesConfig.lazyClass = 'js-lazysizes'
-window.lazySizesConfig.loadedClass = 'is-lazysizes-loaded'
-window.lazySizesConfig.loadingClass = 'is-lazysizes-loading'
+window.lazySizes.cfg = window.lazySizes.cfg || {}
+window.lazySizes.cfg.lazyClass = 'js-lazysizes'
+window.lazySizes.cfg.loadedClass = 'is-lazysizes-loaded'
+window.lazySizes.cfg.loadingClass = 'is-lazysizes-loading'
 
 //page is optimized for fast onload event
-window.lazySizesConfig.loadMode = 1
+window.lazySizes.cfg.loadMode = 1
 
-window.lazySizesConfig.customMedia = {
+window.lazySizes.cfg.customMedia = {
 	'--xxs-portrait': '(max-width: 479px) and (orientation: portrait)',
 	'--xxs': '(max-width: 479px)',
 	'--xs-portrait': '(max-width: 767px) and (orientation: portrait)',

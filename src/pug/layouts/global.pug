@@ -45,18 +45,11 @@ html.no-js
 		link(rel='icon', type="image/x-icon", href='/favicon.ico')
 		link(rel='apple-touch-icon', href="/apple-touch-icon.png")
 
-		//- CSS
-		// Critical CSS
-		// TODO: Critical CSS needs to be
-		// 1. Loaded by back-end script
-		// 2. Loaded once before main.css is cached
-		// ref: https://iamsteve.me/blog/entry/using-cookies-to-serve-critical-css-for-first-time-visits
-		style(id="boilerplatev-crit-css")
-		// END Critical CSS
-
 		//- script.
 		//- 	!function () { var e = function () { var e = document.getElementById("deferred-styles"); (n = document.createElement("div")).innerHTML = e.textContent.trim(); for (var t = n.childNodes, i = 0; i < t.length; i++)document.head.insertBefore(t[i], e); e.parentElement.removeChild(e) }, n = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame; n ? n(function () { window.setTimeout(e, 0) }) : window.addEventListener("load", e) }();
 	body.u-df.u-fxdc
+		//- Inline sprite for icons
+		span.sr-only !{compilation.assets['spritemap.svg'].source()}
 		header.c-header
 			block header
 				include ../partials/header.pug
@@ -68,7 +61,7 @@ html.no-js
 				include ../partials/footer.pug
 
 		script(src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,matchMedia,modernizr:placeholder,Array.prototype.includes,Array.prototype.find,Array.prototype.findIndex,Array.from,Element.prototype.dataset")
-		script(src="https://cdn.jsdelivr.net/combine/npm/jquery@3/dist/jquery.js,npm/vue@2.5.22/dist/vue.js")
+		script(src="https://cdn.jsdelivr.net/combine/npm/jquery@3/dist/jquery.min.js,npm/vue@2.5.22/dist/vue.js")
 
 		//- how to make it read the arguments
 		//- script(defer src='/manifest.js')

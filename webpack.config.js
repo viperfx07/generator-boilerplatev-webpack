@@ -9,6 +9,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin')
 
 const pugHtmls = glob.sync('./src/*.pug').map(template => {
 	const templateSplit = template.split('/')
@@ -27,26 +28,26 @@ const getPostCssPlugins = () =>
 		require('@fullhuman/postcss-purgecss')({
 			content: ['./src/*.pug', './src/pug/**/*.pug', './src/js/*/**.vue'],
 		}),
-		require('cssnano')({
-			rebase: false,
-			discardComments: {
-				removeAll: true,
-			},
-			discardUnused: false,
-			minifyFontValues: true,
-			filterOptimiser: true,
-			functionOptimiser: true,
-			minifyParams: true,
-			normalizeUrl: true,
-			reduceBackgroundRepeat: true,
-			convertValues: true,
-			discardEmpty: true,
-			minifySelectors: true,
-			reduceInitial: true,
-			reduceIdents: false,
-			mergeRules: false,
-			zindex: false,
-		}),
+		// require('cssnano')({
+		// 	rebase: false,
+		// 	// discardComments: {
+		// 	// 	removeAll: true,
+		// 	// },
+		// 	discardUnused: false,
+		// 	minifyFontValues: true,
+		// 	filterOptimiser: true,
+		// 	functionOptimiser: true,
+		// 	minifyParams: true,
+		// 	normalizeUrl: true,
+		// 	reduceBackgroundRepeat: true,
+		// 	convertValues: true,
+		// 	discardEmpty: true,
+		// 	minifySelectors: true,
+		// 	reduceInitial: true,
+		// 	reduceIdents: false,
+		// 	mergeRules: false,
+		// 	zindex: false,
+		// }),
 	].filter(item => !!item)
 
 module.exports = {
@@ -56,6 +57,7 @@ module.exports = {
 	output: {
 		filename: '[name].js?v=[hash]',
 		chunkFilename: '[name].js?v=[chunkhash]',
+		path: path.resolve(__dirname, 'dist'),
 		publicPath: '/',
 	},
 	resolve: {
@@ -86,9 +88,9 @@ module.exports = {
 					// this applies to pug imports inside JavaScript
 					{
 						use: [
-							'raw-loader',
+							// 'raw-loader',
 							{
-								loader: 'pug-plain-loader',
+								loader: 'pug-loader',
 								options: {
 									pretty: true,
 									plugins: [pugIncludeGlob({})],
@@ -165,7 +167,7 @@ module.exports = {
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules(\/|\\)(?!(conditioner-core|bootstrap|vue2-smooth-scroll|simplestatemanager|lru-cache)(\/|\\)).*/,
+				exclude: /node_modules(\/|\\)(?!(conditioner-core|bootstrap|simplestatemanager)(\/|\\)).*/,
 				options: {
 					// note: if some modules don't work on IE10/IE11, try loose mode on preset-env
 					// example below:
@@ -183,11 +185,13 @@ module.exports = {
 						['@babel/plugin-proposal-class-properties', { loose: true }],
 					],
 				},
-				// include: __dirname,
 			},
 			{
 				test: /\.(jpe?g|gif|png|svg|woff|ttf|eot|wav|mp3)$/,
 				loader: 'file-loader',
+				options: {
+					name: '[path][name].[ext]',
+				},
 			},
 		],
 	},
@@ -206,6 +210,11 @@ module.exports = {
 		},
 	},
 	plugins: [
+		new SVGSpritemapPlugin('./src/icons/*.svg', {
+			sprite: {
+				prefix: () => '',
+			},
+		}),
 		...pugHtmls,
 		new HtmlWebpackPlugin({
 			template: './cshtml/_Layout.cshtml',
@@ -219,7 +228,6 @@ module.exports = {
 		new ManifestPlugin(),
 	],
 	devServer: {
-		contentBase: path.join(__dirname, 'dist'),
 		compress: true,
 		open: true,
 	},
