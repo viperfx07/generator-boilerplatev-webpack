@@ -16,7 +16,7 @@ $slick-opacity-default: 0.75;
 $slick-opacity-on-hover: 1;
 $slick-opacity-not-active: 0.25;
 
-/* purgecss start ignore */
+/*! purgecss start ignore */
 @import '~slick-carousel/slick/slick.scss';
 @import '~slick-carousel/slick/slick-theme.scss';
 // ==========================================================================
@@ -73,4 +73,4 @@ $slick-opacity-not-active: 0.25;
 	&-next {
 	}
 }
-/* purgecss end ignore */
+/*! purgecss end ignore */

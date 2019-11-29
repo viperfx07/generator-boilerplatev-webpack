@@ -28,26 +28,26 @@ const getPostCssPlugins = () =>
 		require('@fullhuman/postcss-purgecss')({
 			content: ['./src/*.pug', './src/pug/**/*.pug', './src/js/*/**.vue'],
 		}),
-		// require('cssnano')({
-		// 	rebase: false,
-		// 	// discardComments: {
-		// 	// 	removeAll: true,
-		// 	// },
-		// 	discardUnused: false,
-		// 	minifyFontValues: true,
-		// 	filterOptimiser: true,
-		// 	functionOptimiser: true,
-		// 	minifyParams: true,
-		// 	normalizeUrl: true,
-		// 	reduceBackgroundRepeat: true,
-		// 	convertValues: true,
-		// 	discardEmpty: true,
-		// 	minifySelectors: true,
-		// 	reduceInitial: true,
-		// 	reduceIdents: false,
-		// 	mergeRules: false,
-		// 	zindex: false,
-		// }),
+		require('cssnano')({
+			rebase: false,
+			// discardComments: {
+			// 	removeAll: true,
+			// },
+			discardUnused: false,
+			minifyFontValues: true,
+			filterOptimiser: true,
+			functionOptimiser: true,
+			minifyParams: true,
+			normalizeUrl: true,
+			reduceBackgroundRepeat: true,
+			convertValues: true,
+			discardEmpty: true,
+			minifySelectors: true,
+			reduceInitial: true,
+			reduceIdents: false,
+			mergeRules: false,
+			zindex: false,
+		}),
 	].filter(item => !!item)
 
 module.exports = {
