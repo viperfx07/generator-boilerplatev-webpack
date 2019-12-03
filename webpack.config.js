@@ -187,7 +187,7 @@ module.exports = {
 				},
 			},
 			{
-				test: /\.(jpe?g|gif|png|svg|woff|ttf|eot|wav|mp3)$/,
+				test: /\.(jpe?g|gif|png|svg|woff|woff2|ttf|eot|wav|mp3)$/,
 				loader: 'file-loader',
 				options: {
 					name: '[path][name].[ext]',
@@ -196,11 +196,7 @@ module.exports = {
 		],
 	},
 	optimization: {
-		minimizer: [
-			new UglifyJsPlugin({
-				parallel: true,
-			}),
-		],
+		moduleIds: 'hashed',
 		runtimeChunk: {
 			name: 'manifest',
 		},
@@ -208,18 +204,24 @@ module.exports = {
 			// include all types of chunks
 			chunks: 'all',
 		},
+		minimizer: [
+			new UglifyJsPlugin({
+				parallel: true,
+			}),
+		],
 	},
 	plugins: [
-		new SVGSpritemapPlugin('./src/icons/*.svg', {
-			sprite: {
-				prefix: () => '',
-			},
-		}),
 		...pugHtmls,
 		new HtmlWebpackPlugin({
 			template: './cshtml/_Layout.cshtml',
 			filename: './cshtml/Layout.cshtml',
 			inject: false,
+		}),
+		new CleanWebpackPlugin(),
+		new SVGSpritemapPlugin('./src/icons/*.svg', {
+			sprite: {
+				prefix: () => '',
+			},
 		}),
 		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({

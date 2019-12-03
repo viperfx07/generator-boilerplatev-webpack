@@ -23,6 +23,7 @@
 		"babel-loader": "^8.0.6",
 		"bootstrap": "^4.3.1",
 		"clamp-js-main": "^0.11.6",
+		"clean-webpack-plugin": "^3.0.0",
 		"conditioner-core": "^2.3.3",
 		"copy-webpack-plugin": "^5.0.5",
 		"css-loader": "^3.2.0",
