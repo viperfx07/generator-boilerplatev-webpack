@@ -1,14 +1,31 @@
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie9" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <!--<![endif]-->
 	<head>
+		<meta charset="utf-8">
 		<title>Test</title>
+		 <% if (htmlWebpackPlugin.files.favicon) { %>
+		<link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon%>">
+		<% } %>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<% for (var css in htmlWebpackPlugin.files.css) { %>
+		<link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
+		<% } %>
 	</head>
 	<body>
+		@* BEGIN Generated icon spritemap from Webpack [DONT REMOVE] *@
 		<%= compilation.assets['spritemap.svg'].source() %>
+		@* END Generated icon spritemap from Webpack [DONT REMOVE] *@
 
-		<script src="before.js"></script>
+		@* ENTER CONTENT HERE *@
+
+		@* BEGIN Generated Javascript chunks/entries from Webpack [DONT REMOVE] *@
 		<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
 		<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
 		<% } %>
-		<script src="after.js"></script>
+		@* END Generated Javascript chunks/entries from Webpack [DONT REMOVE] *@
 	</body>
 </html>

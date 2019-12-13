@@ -1,5 +1,5 @@
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 
 // These are the variables that most often changed from Bootstrap SCSS
 // Other variables can be found node_modules/bootstrap/scss/_variables.scss
@@ -21,10 +21,10 @@ $highlight: $light;
 
 // BoilerplateV colors - used by the colors in _utilities.base.scss
 $bv-colors: (
-	"primary" : $primary,
-	"secondary": $secondary,
-	"text" : $text,
-	"highlight": $highlight
+	'primary': $primary,
+	'secondary': $secondary,
+	'text': $text,
+	'highlight': $highlight,
 );
 
 // Spacing
@@ -34,7 +34,7 @@ $bv-colors: (
 // You can add more entries to the $spacers map, should you need more variation.
 
 // stylelint-disable-next-line scss/dollar-variable-default
-$baseline: 6px !default;
+$baseline: <%= baseline %>px !default;
 $spacers: (
 	0: $baseline * 0,
 	1: $baseline * 1,
@@ -53,17 +53,17 @@ $spacers: (
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   $white !default;
-$body-color:                $gray-900 !default;
+$body-bg: $white !default;
+$body-color: $gray-900 !default;
 
 // Links
 //
 // Style anchor elements.
 
-$link-color:                              theme-color("primary") !default;
-$link-decoration:                         none !default;
-$link-hover-color:                        darken($link-color, 15%) !default;
-$link-hover-decoration:                   underline !default;
+$link-color: theme-color('primary') !default;
+$link-decoration: none !default;
+$link-hover-color: darken($link-color, 15%) !default;
+$link-hover-decoration: underline !default;
 // Darken percentage for links with `.text-*` class (e.g. `.text-success`)
 $emphasized-link-hover-darken-percentage: 15% !default;
 
@@ -71,8 +71,7 @@ $emphasized-link-hover-darken-percentage: 15% !default;
 //
 // Style p element.
 
-$paragraph-margin-bottom:   1rem !default;
-
+$paragraph-margin-bottom: 1rem !default;
 
 // Grid breakpoints
 //
@@ -87,10 +86,12 @@ $paragraph-margin-bottom:   1rem !default;
 //   xl: 1200px
 // ) !default;
 
-$grid-breakpoints:(xs:0,
-sm:768px,
-md:992px,
-lg:1200px);
+$grid-breakpoints: (
+	xs: 0,
+	sm: 768px,
+	md: 992px,
+	lg: 1200px,
+);
 
 // Grid containers
 //
@@ -103,12 +104,13 @@ lg:1200px);
 //   xl: 1140px
 // ) !default;
 
-$container-max-widths: (sm: 720px,
-md: 960px,
-lg: 1140px);
+$container-max-widths: (
+	sm: 720px,
+	md: 960px,
+	lg: 1140px,
+);
 
-@include _assert-ascending($container-max-widths, "$container-max-widths");
-
+@include _assert-ascending($container-max-widths, '$container-max-widths');
 
 // Grid columns
 //
@@ -117,37 +119,20 @@ lg: 1140px);
 $grid-columns: 12 !default;
 $grid-gutter-width: 30px !default;
 
-
 // Fonts
 //
 // Font, line-height, and color for body text, headings, and more.
 
 // stylelint-disable value-keyword-case
-$font-family-sans-serif: -apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-Roboto,
-"Helvetica Neue",
-Arial,
-"Noto Sans",
-sans-serif,
-"Apple Color Emoji",
-"Segoe UI Emoji",
-"Segoe UI Symbol",
-"Noto Color Emoji" !default;
-$font-family-monospace: SFMono-Regular,
-Menlo,
-Monaco,
-Consolas,
-"Liberation Mono",
-"Courier New",
-monospace !default;
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+	sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !default;
+$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !default;
 $font-family-base: $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 
 $font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
 $font-size-lg: ($font-size-base * 1.25) !default;
-$font-size-sm: ($font-size-base * .875) !default;
+$font-size-sm: ($font-size-base * 0.875) !default;
 
 $font-weight-lighter: lighter !default;
 $font-weight-light: 300 !default;

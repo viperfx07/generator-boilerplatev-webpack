@@ -11,13 +11,17 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin')
+const FileManagerPlugin = require('filemanager-webpack-plugin')
 
 const pugHtmls = glob.sync('./src/*.pug').map(template => {
 	const templateSplit = template.split('/')
 
+	//output the filename to 2 directories above from output.path
+	const filename = '../../' + templateSplit[templateSplit.length - 1].replace('.pug', '.html')
+
 	return new HtmlWebpackPlugin({
 		template,
-		filename: templateSplit[templateSplit.length - 1].replace('.pug', '.html'),
+		filename,
 	})
 })
 
@@ -56,10 +60,10 @@ module.exports = {
 		main: ['./src/js/main.js', './src/css/main.scss'],
 	},
 	output: {
-		filename: '[name].js?v=[hash]',
-		chunkFilename: '[name].js?v=[chunkhash]',
-		path: path.resolve(__dirname, 'dist'),
-		publicPath: '/',
+		filename: '[name].[hash].js',
+		chunkFilename: '[name].[chunkhash].js',
+		path: path.resolve(__dirname, 'tmp/www_shared/assets'), //this is the output path of the generated files
+		publicPath: '/www_shared/assets/', //this is the public path (request path) to the folder that contains the generated files
 	},
 	resolve: {
 		extensions: ['.js', '.vue'],
@@ -89,7 +93,6 @@ module.exports = {
 					// this applies to pug imports inside JavaScript
 					{
 						use: [
-							// 'raw-loader',
 							{
 								loader: 'pug-loader',
 								options: {
@@ -184,6 +187,8 @@ module.exports = {
 						// // Stage 3
 						'@babel/plugin-syntax-dynamic-import',
 						['@babel/plugin-proposal-class-properties', { loose: true }],
+						'@babel/plugin-proposal-optional-chaining',
+						'@babel/plugin-proposal-nullish-coalescing-operator',
 					],
 				},
 			},
@@ -212,12 +217,12 @@ module.exports = {
 		],
 	},
 	plugins: [
-		...pugHtmls,
+		...pugHtmls,<% if (replaceRazorLayout){ %>
 		new HtmlWebpackPlugin({
 			template: './cshtml/_Layout.cshtml',
-			filename: './cshtml/Layout.cshtml',
+			filename: '../../Views/Shared/Layout.cshtml', //the output path is relative to the output.path
 			inject: false,
-		}),
+		}),<% } %>
 		new CleanWebpackPlugin(),
 		new SVGSpritemapPlugin('./src/icons/*.svg', {
 			sprite: {
@@ -229,10 +234,24 @@ module.exports = {
 			filename: 'main.[chunkhash].css',
 		}),
 		new ManifestPlugin(),
+		new FileManagerPlugin({
+			onStart: {
+				// Remove file and folder
+				delete: [<% if (replaceRazorLayout){ %>'../Views/Shared/Layout.cshtml', <% } %>'../www_shared/'],
+			},
+			onEnd: {
+				copy: [
+					// Copy all the files from tmp (except html) to '../'
+					{ source: './tmp/**/*.!(html)', destination: '../' },
+					{ source: './static/**/*', destination: '../www_shared/assets/' }
+				],
+			},
+		}),
 	],
 	devServer: {
 		compress: true,
 		open: true,
-		writeToDisk: true,
+		contentBase: path.resolve(__dirname, 'tmp/'), //serve static files from this path
+		writeToDisk: true, //write build files to disk (to output.path)
 	},
 }

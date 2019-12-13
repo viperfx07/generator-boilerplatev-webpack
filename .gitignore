@@ -1,1 +1,9 @@
 node_modules/
+
+generators/app/templates/tmp/
+
+generators/app/Views/
+
+generators/app/www_shared/
+
+generators/app/templates/yarn.lock

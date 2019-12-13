@@ -32,17 +32,17 @@ module.exports = class extends Generator {
 			},
 			{
 				type: 'confirm',
-				name: 'hasVueStyleguide',
-				message: 'Do you want to add vue-styleguide',
-				default: false,
+				name: 'replaceRazorLayout',
+				message: 'Replace Views/Shared/Layout.cshtml',
+				default: true,
 			},
-			{
-				type: 'list',
-				name: 'dirStructure',
-				message: 'Directory structure standard',
-				choices: ['Kentico', 'Umbraco', 'None'],
-				default: 'Kentico',
-			},
+			// {
+			// 	type: 'list',
+			// 	name: 'dirStructure',
+			// 	message: 'Directory structure standard',
+			// 	choices: ['Kentico', 'Umbraco', 'None'],
+			// 	default: 'Kentico',
+			// },
 			{
 				type: 'input',
 				name: 'baseline',
@@ -57,6 +57,7 @@ module.exports = class extends Generator {
 			},
 		]).then(answers => {
 			this.projectName = answers.name
+			this.replaceRazorLayout = answers.replaceRazorLayout
 			this.baseline = answers.baseline
 			this.skipInstall = answers.skipInstall
 			this.dirStructure = answers.dirStructure
@@ -64,35 +65,17 @@ module.exports = class extends Generator {
 		})
 	}
 	writing() {
-		var dirByStructures = {
-			Kentico: {
-				assets: '/www_shared/assets',
-				otherWWW: '../',
-			},
-			Umbraco: {
-				assets: '/static',
-				otherWWW: '../XXX.Web',
-			},
-			None: {
-				assets: '/assets',
-				otherWWW: '',
-			},
-		}
-
-		var config = {
-			projectName: this.projectName,
-			skipInstall: this.skipInstall,
-			hasVueStyleguide: this.hasVueStyleguide,
-			assetsDir: dirByStructures[this.dirStructure].assets,
-			otherWWW: dirByStructures[this.dirStructure].otherWWW,
-			baseline: this.baseline,
+		const config = {
+			...this,
 			_: underscore,
 			pkg: pkg,
 		}
 
+		const { replaceRazorLayout } = this
+
 		// Files
 		const copyTplDirs = [
-			'cshtml/',
+			replaceRazorLayout ? 'cshtml/' : '',
 			'src/',
 			'src/css/',
 			'src/icons/',
@@ -103,13 +86,15 @@ module.exports = class extends Generator {
 			'src/static/',
 		]
 
-		copyTplDirs.forEach(dir => {
-			this.fs[dir.includes('cshtml') ? 'copy' : 'copyTpl'](
-				this.templatePath(dir),
-				this.destinationPath(dir.replace('*', '')),
-				config,
-			)
-		})
+		copyTplDirs
+			.filter(item => !!item)
+			.forEach(dir => {
+				this.fs[dir.includes('cshtml') ? 'copy' : 'copyTpl'](
+					this.templatePath(dir),
+					this.destinationPath(dir.replace('*', '')),
+					config,
+				)
+			})
 
 		// Copy all the files in the root
 		this.fs.copyTpl(this.templatePath('*.*'), this.destinationRoot(), config)
